@@ -1,0 +1,8 @@
+numpy
+matplotlib
+scipy
+PyQt6
+PySide6
+PyQt5
+PySide2
+sounddevice
