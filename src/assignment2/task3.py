@@ -14,11 +14,15 @@ n = n[n != 0]
 freqs = n * omega
 
 # Fourier coefficients
-cn = np.exp(1J * np.pi * n) * 1j * 2 / (n)
+cn = np.exp(1J * np.pi * n) * 1j * (2 / (n))
+
+# Transfer function
+alpha = (1000 * np.pi)
+H_omega = ((alpha)**2) /((-omega**2) + (2 * alpha * 1J * omega) + (alpha**2))
 
 # Compute magnitude and phase
-mag = np.abs(cn)
-phase = np.angle(cn)
+mag = np.abs(cn) * np.abs(H_omega)
+phase = np.angle(cn) + np.angle(H_omega)
 
 # Ensure phase stays within [-π, π]
 phase[phase < -np.pi] += 2 * np.pi
