@@ -39,8 +39,10 @@ y3 = y3[0:t.shape[0]]
 y1_y2 = y1 + y2
 
 fig, bx = plt.subplots()
-#bx.plot(t, y3, label="y3(t)")
-bx.plot(t, y1_y2, label="y1(t)+y2(t)")
+bx.plot(t, y3, label="y3(t)")
+#bx.plot(t, y1_y2, label="y1(t)+y2(t)")
 plt.legend()
 plt.grid()
 plt.show()
+
+sd.play(y3, 1/increment, blocking=True)
