@@ -4,30 +4,31 @@ import matplotlib.pyplot as plt
 # Define parameters
 period = 0.005
 
-N = 75
+N = 12
 
 # Create the range of n and exclude zero
 n = np.arange(-N, N + 1)
 n = n[n != 0]
-omega = (n / period)
+omega = n * 2 * np.pi / period
 
 # Fourier coefficients
-cn = np.exp(1J * np.pi * n) * 1j * (2 / (n))
+cn = np.exp(1J * np.pi * n) * 1j * (1 / ((n) * np.pi))
 
 # Transfer function
 alpha = (1000 * np.pi)
 H_omega = ((alpha)**2) /((-omega**2) + (2 * alpha * 1J * omega) + (alpha**2))
+X_omega = 2 * np.pi * cn
 
 # Compute magnitude and phase
-mag = (np.pi * np.abs(cn)) * np.abs(H_omega)
-phase = (np.pi * np.angle(cn)) + np.angle(H_omega)
+mag = (np.abs(X_omega)) * np.abs(H_omega)
+phase = (np.angle(X_omega)) + np.angle(H_omega)
 
 # Ensure phase stays within [-π, π]
-phase[phase < -np.pi] += 2 * np.pi
-phase[phase > np.pi] -= 2 * np.pi
+phase[phase < 0] += 2 * np.pi
+phase[phase > 2 * np.pi] -= 2 * np.pi
 
 # Plot magnitude and phase
-plt.figure(figsize=(14, 6))
+plt.figure(figsize=(10, 3))
 
 # Magnitude plot
 plt.subplot(1, 2, 1)
