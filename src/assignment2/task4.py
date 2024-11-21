@@ -1,57 +1,62 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Define parameters
-period = 0.005  # Signal period
-omega0 = 2 * np.pi / period  # Fundamental angular frequency
-alpha = 1000 * np.pi  # System parameter
-T = 0.015  # Time interval (15 ms)
 
-# Create time vector
-t = np.linspace(0, T, 1000)  # 1000 points in the interval [0, 15ms]
+period = 0.005  # 5 ms
+alpha = 1000 * np.pi
+t = np.arange(0, 0.015, 0.00001)
+omega_0 = (2 * np.pi) / period
 
-# Function to calculate y(t) for a given N
+N_vals = [1, 2, 10, 20]
+plt.figure(figsize=(10, 6))
 
+k = 0
+y_t = np.zeros((4, t.size))
 
-def calculate_output(N):
-    n = np.arange(-N, N + 1)  # Range of harmonics
-    n = n[n != 0]  # Exclude zero to avoid division by zero
-    omega = n * omega0  # Angular frequencies
+for N in N_vals:
+    n = np.arange(-N, N + 1)
+    n = n[n != 0]
+    omega = n * (2 * np.pi) / period
 
-    # Fourier coefficients
-    cn = np.exp(1J * np.pi * n) * 1j * (1 / (n * np.pi))
+    X_w = np.exp(1j * np.pi * n) * 2j / n
+    X_mag = np.abs(X_w)
+    X_phase = np.angle(X_w)
 
-    # Transfer function
-    H_omega = (alpha**2) / ((-omega**2) + (2 * alpha * 1J * omega) + (alpha**2))
-    X_omega = 2 * np.pi * cn
+    for i in range(len(X_w)):
+        if i < N:
+            if X_phase[i] < 0:
+                X_phase[i] += 2 * np.pi
+        else:
+            if X_phase[i] > 0:
+                X_phase[i] -= 2 * np.pi
 
-    # Compute the output spectrum Y(omega)
-    Y_omega = H_omega * X_omega
+    H_w = (alpha ** 2) / (-omega ** 2 + 2 * alpha * 1j * omega + alpha ** 2)
+    H_mag = np.abs(H_w)
+    H_phase = np.angle(H_w)
 
-    # Reconstruct y(t) using inverse Fourier transform
-    y_t = np.zeros_like(t, dtype=complex)
-    for i, time in enumerate(t):
-        y_t[i] = np.sum(Y_omega * np.exp(1J * omega * time))
+    Y_mag = X_mag * H_mag
+    Y_phase = X_phase + H_phase
+    Y_w = Y_mag * np.exp(1j * Y_phase)
 
-    # Divide by 2π as per the inverse Fourier transform
-    return np.real(y_t) / (2 * np.pi)
+    def yt(t):
+        y = 0
+        for i in range(len(n)):
+            y += 1 / (2* np.pi) * Y_w[i] * np.exp(1j * n[i] * omega_0 * t)
+        return np.real(y)
 
+    y = yt(t)
+    y_t[k] = y
+    k += 1
 
-# Calculate and plot y(t) for N = 1, 2, 10, 20
-N_values = [1, 2, 10, 20]
-plt.figure(figsize=(10, 8))
+plt.xlabel("Time (seconds)")
+plt.ylabel("Amplitude")
+plt.plot(t, y_t[0], label="N=1")
+plt.plot(t, y_t[1], label="N=2")
+plt.plot(t, y_t[2], label="N=10")
+plt.plot(t, y_t[3], label="N=20")
 
-for i, N in enumerate(N_values, 1):
-    y_t = calculate_output(N)
-    plt.subplot(2, 2, i)
-    # Convert t to ms for better visualization
-    plt.plot(t * 1000, y_t, label=f"N = {N}")
-    plt.title(f"Synthesized Signal for N = {N}")
-    plt.xlabel("Time (ms)")
-    plt.ylabel("y(t)")
-    plt.grid()
-    plt.legend()
+plt.legend()
 
-# Adjust layout and show the plots
-plt.tight_layout()
+#plt.plot(t, y_t[0], t,  y_t[1], t,  y_t[2], t, y_t[3])
+plt.grid(True)
 plt.show()
