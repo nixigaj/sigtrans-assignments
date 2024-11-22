@@ -10,7 +10,12 @@ N_vals = [1, 2, 10, 20]
 
 # Initialize
 y_t = np.zeros((4, t.size))
-x_t = np.zeros((4, t.size))
+
+# Generate a geometrically perfect sawtooth wave
+def perfect_sawtooth(t, period, peak=1):
+    return 2 * (t / period - np.floor(t / period + 0.5)) * peak
+
+x_t_perfect = perfect_sawtooth(t, period)
 
 k = 0
 
@@ -43,13 +48,6 @@ for N in N_vals:
     Y_phase = X_phase + H_phase
     Y_w = Y_mag * np.exp(1j * Y_phase)
 
-    # Define x(t)
-    def xt(t):
-        x = 0
-        for i in range(len(n)):
-            x += 1 / (2 * np.pi) * X_w[i] * np.exp(1j * n[i] * omega_0 * t)
-        return np.real(x)
-
     # Define y(t)
     def yt(t):
         y = 0
@@ -58,17 +56,18 @@ for N in N_vals:
         return np.real(y)
 
     # Store results for plotting
-    x_t[k] = xt(t)
     y_t[k] = yt(t)
     k += 1
 
 # Plot results
 plt.figure(figsize=(12, 6))
 
-# Plot x(t) and y(t) on the same plot for each N
+# Plot the perfect sawtooth wave
+plt.plot(t, x_t_perfect, label="x(t)", linestyle='--', color='black')
+
+# Plot y(t) for each N
 for i, N in enumerate(N_vals):
     plt.plot(t, y_t[i], label=f"y(t) for N={N}")
-    plt.plot(t, x_t[i], label=f"x(t) for N={N}", alpha=0.3)
 
 plt.xlabel("Time (seconds)")
 plt.ylabel("Amplitude")

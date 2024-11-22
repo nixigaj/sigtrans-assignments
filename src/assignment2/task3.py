@@ -21,7 +21,7 @@ for i in range(len(X_w)):
         if (X_phase[i] < 0):
             X_phase[i] += 2 * np.pi
     else:
-        if (X_phase[i] > 0):
+        if (X_phase[i] >= 0):
             X_phase[i] -= 2 * np.pi
 
 
@@ -59,10 +59,10 @@ plt.legend()
 plt.grid()
 
 x1, y1 = [0], [0]
-plt.plot(x1, y1, marker='o')
+plt.plot(x1, y1, marker='o', color='red')
 
 x1, y1 = [0], [0]
-plt.plot(x1, y1, marker='o', color='red')
+plt.plot(x1, y1, marker='o')
 
 plt.tight_layout()
 plt.show()
