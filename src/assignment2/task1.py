@@ -18,8 +18,8 @@ mag = np.abs(X_omega)
 phase = np.angle(X_omega)
 
 # wrapping
-phase[phase < 0] += 2 * np.pi
-phase[phase > 0] -= 2 * np.pi
+phase[n < 0] += 2 * np.pi
+phase[n > 0] -= 2 * np.pi
 
 plt.figure(figsize=(10, 3))
 
