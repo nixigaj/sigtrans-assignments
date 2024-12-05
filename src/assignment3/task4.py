@@ -8,7 +8,7 @@ order = 4              # Filter order
 cutoff_freq = 3400     # Cut-off frequency in Hz (3.4 kHz)
 original_fs = 40000   # Original recording frequency (40 kHz)
 new_sampling_freq = 8000  # New sampling frequency (8 kHz)
-duration = 10          # Duration of the recording in seconds
+duration = 10         # Duration of the recording in seconds
 
 # Step 1: Record the signal
 print("Recording for 10 seconds...")
@@ -32,9 +32,8 @@ frequencies = w / (2 * np.pi)  # Convert from rad/s to Hz
 magnitude_linear = 10 ** (magnitude / 20)  # Convert dB to linear scale
 
 # Plot the magnitude response
-plt.figure(figsize=(10, 6))
-plt.semilogx(frequencies, magnitude_linear)
-plt.title("Frequency Response of 4th-Order Butterworth Filter", fontsize=14)
+plt.figure(figsize=(6, 4))
+plt.plot(frequencies, magnitude_linear)
 plt.xlabel("Frequency (Hz)", fontsize=12)
 plt.ylabel("Gain", fontsize=12)
 plt.grid(True, which='both')
