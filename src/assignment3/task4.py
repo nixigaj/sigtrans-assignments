@@ -32,7 +32,7 @@ frequencies = w / (2 * np.pi)  # Convert from rad/s to Hz
 magnitude_linear = 10 ** (magnitude / 20)  # Convert dB to linear scale
 
 # Plot the magnitude response
-plt.figure(figsize=(6, 4))
+plt.figure(figsize=(8, 3))
 plt.plot(frequencies, magnitude_linear)
 plt.xlabel("Frequency (Hz)", fontsize=12)
 plt.ylabel("Gain", fontsize=12)
