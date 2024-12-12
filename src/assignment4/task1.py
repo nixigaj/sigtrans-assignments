@@ -3,7 +3,7 @@ import numpy as np
 
 # Frequencies of the signals in Hz
 frequencies_hz = [21, 22]  # f1 and f2
-magnitude = np.pi  # Magnitude of the spectrum
+magnitude = 1/2  # Magnitude of the spectrum
 
 # Create a figure for both plots
 plt.figure(figsize=(10, 6))
